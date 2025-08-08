@@ -25,9 +25,58 @@ module.exports = function(grunt){
             },
             html:{
                 files:['src/index.html'],
-                tasks:['replace:html'],
+                tasks:['replace:dev'],
             }
         },
+        replace:{
+            dev:{
+                options:{
+                    patterns:[
+                        {
+                            match:'ENDERECO_DO_CSS',
+                            replacement:'./styles/main.css'
+                        },
+                        {
+                            match:'ENDERECO_DO_JS',
+                            replacement:'../src/scripts/main.js'
+                        }
+                    ]
+                }
+            },
+            dist:{
+                options:{
+                    patterns:[
+                        {
+                            match:'ENDERECO_DO_CSS',
+                            replacement:'./styles/main.min.css'
+                        },
+                        {
+                            match:'ENDERECO_DO_JS',
+                            replacement:'./scripts/main.min.js'
+                        }
+                    ]
+                }
+            },
+        },
+        htmlmin:{
+            dist:{
+                options:{
+                    removeComments: true,
+                    collapseWhitespace: true,
+                },
+                files:{
+                    'prebuild/index.html': 'src/index.html'
+                }
+            }
+        },
+        clean:['prebuild',],
+        uglify:{
+            target:{
+                files:{
+                    'dist/scripts/main.min.js': 'src/scripts/main.js'
+                }
+            }
+        }
     });
 
     // Load tasks
@@ -40,5 +89,5 @@ module.exports = function(grunt){
 
     // Register tasks
     grunt.registerTask('default', ['watch',]);
-    grunt.registerTask('build',[])
+    grunt.registerTask('build',['less:production','replace:dist','htmlmin','uglify','clean',]);
 }
