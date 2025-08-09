@@ -85,6 +85,22 @@ module.exports = function(grunt){
                 }
             }
         },
+        imagemin:{
+            dynamic:{
+                files:[{
+                    expand: true,
+                    cwd: 'src/images/',
+                    src: ['**/*.png'],
+                    dest: 'dist/images/'
+                    }, {
+                    expand: true,
+                    cwd: 'src/images/',
+                    src: ['**/*.png'],
+                    dest: 'dev/images/',
+                    }
+                ],
+            },
+        },
         clean:['prebuild',],
         uglify:{
             target:{
@@ -101,7 +117,8 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
 
     grunt.registerTask('default',['watch',]);
-    grunt.registerTask('build',['less:production','htmlmin:dist','replace:dist','clean','uglify',]);
+    grunt.registerTask('build',['less:production','htmlmin:dist','replace:dist','clean','uglify','imagemin',]);
 }
