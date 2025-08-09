@@ -14,7 +14,7 @@ module.exports = function(grunt){
                     compress: true,
                 },
                 files:{
-                    'dist/styles/main.css': 'src/styles/main.less'
+                    'dist/styles/main.min.css': 'src/styles/main.less'
                 }
             }
         },
@@ -41,7 +41,15 @@ module.exports = function(grunt){
                             replacement:'../src/scripts/main.js'
                         }
                     ]
-                }
+                },
+                files:[
+                    {
+                        expand: true,
+                        flatten: true,
+                        src:['src/index.html'],
+                        dest:'dev/'
+                    }
+                ]
             },
             dist:{
                 options:{
@@ -55,8 +63,16 @@ module.exports = function(grunt){
                             replacement:'./scripts/main.min.js'
                         }
                     ]
-                }
-            },
+                },
+                files:[
+                    {
+                        expand: true,
+                        flatten: true,
+                        src:['prebuild/index.html'],
+                        dest:'dist/'
+                    }
+                ]
+            }
         },
         htmlmin:{
             dist:{
@@ -77,9 +93,8 @@ module.exports = function(grunt){
                 }
             }
         }
-    });
+    })
 
-    // Load tasks
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-replace');
@@ -87,7 +102,6 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    // Register tasks
-    grunt.registerTask('default', ['watch',]);
-    grunt.registerTask('build',['less:production','replace:dist','htmlmin','uglify','clean',]);
+    grunt.registerTask('default',['watch',]);
+    grunt.registerTask('build',['less:production','htmlmin:dist','replace:dist','clean','uglify',]);
 }
