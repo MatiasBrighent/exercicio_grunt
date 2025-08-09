@@ -26,7 +26,11 @@ module.exports = function(grunt){
             html:{
                 files:['src/index.html'],
                 tasks:['replace:dev'],
-            }
+            },
+            js:{
+                files:['src/scripts/**/*.js'],
+                tasks:['replace:dev'],
+            },
         },
         replace:{
             dev:{
@@ -108,7 +112,19 @@ module.exports = function(grunt){
                     'dist/scripts/main.min.js': 'src/scripts/main.js'
                 }
             }
-        }
+        },
+        copy:{
+            dev:{
+                files:[
+                    {
+                        expand: true,
+                        cwd: 'src/scripts/',
+                        src: ['main.js'],
+                        dest: 'dev/scripts/'
+                    }
+                ]
+            }
+        },
     })
 
     grunt.loadNpmTasks('grunt-contrib-less');
@@ -118,7 +134,8 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.registerTask('default',['watch',]);
-    grunt.registerTask('build',['less:production','htmlmin:dist','replace:dist','clean','uglify','imagemin',]);
+    grunt.registerTask('build',['less:production','htmlmin:dist','replace:dist','clean','uglify','imagemin','copy:dev']);
 }
